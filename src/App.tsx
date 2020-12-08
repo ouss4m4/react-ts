@@ -1,51 +1,48 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from "react";
+import { IUser } from "./typings/typings";
+import UserList from "./components/UserList/UserList";
+import useObservable from "./hooks/useObservable";
+import { getUsers, userList$ } from "./facade/userFacade";
 import logo from "./logo.svg";
 import "./App.css";
-import { IUser } from "./typings/typings";
-import UserProfile from "./components/UserProfile/UserProfile";
-import UserList from "./components/UserList/UserList";
-
-const APP_ID = "5fce783f75d63ad04da2c30b";
-const BASE_URL = "https://dummyapi.io/data/api";
 
 function App() {
-  const [loading, setLoading] = useState(false);
-  const [list, setList] = useState<IUser[]>([]);
-  const [page, setPage] = useState<number>(1);
-  const [limit, setLimit] = useState<number>(1);
+  const list = useObservable<IUser[]>(userList$) || [];
+  const [page, setPage] = useState<string>("1");
+  const [limit, setLimit] = useState<string>("1");
 
   useEffect(() => {
-    setLoading(true);
-    axios
-      .get<{ data: IUser[] }>(`${BASE_URL}/user?page=${page}&limit=${limit}`, {
-        headers: { "app-id": APP_ID },
-      })
-      .then(({ data }) => {
-        console.log("raw data", data.data);
-        setList(data.data);
-      })
-      .catch(console.error)
-      .finally(() => setLoading(false));
-  }, [limit, page]);
+    getUsers(page, limit);
+  }, [page, limit]);
 
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <h1>RxJS with React</h1>
-        <form>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+          }}
+        >
+          <label>page </label>
           <input
+            name="Page"
             type="number"
             value={page}
-            onChange={(e) => setPage(parseInt(e.target.value))}
+            onChange={(e) => setPage(e.target.value)}
           />
         </form>
-        <form>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+          }}
+        >
+          <label>limit</label>
           <input
             type="number"
             value={limit}
-            onChange={(e) => setLimit(parseInt(e.target.value))}
+            onChange={(e) => setLimit(e.target.value)}
           />
         </form>
         <UserList list={list} />
