@@ -7,8 +7,8 @@ const APP_ID = "5fce783f75d63ad04da2c30b";
 const BASE_URL = "https://dummyapi.io/data/api";
 
 export const fetchUsers = (
-  page: string,
-  limit: string
+  page: number,
+  limit: number
 ): Observable<IUser[]> => {
   return ajax
     .getJSON<{ data: IUser[] }>(
@@ -20,7 +20,7 @@ export const fetchUsers = (
     .pipe(
       map(({ data }) => data),
       catchError((error) => {
-        console.log("error: ", error);
+        console.log("raw error: ", error);
         return throwError(error);
       })
     );
