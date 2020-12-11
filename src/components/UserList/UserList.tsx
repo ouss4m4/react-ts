@@ -1,7 +1,6 @@
 import React, { ReactElement } from "react";
 import { IUser } from "../../typings/typings";
 import UserProfile from "../UserProfile/UserProfile";
-import { getUsers } from "../../facade/userFacade";
 
 interface UserListProps {
   list: IUser[];
@@ -23,13 +22,6 @@ const UserList = ({ list }: UserListProps): ReactElement => {
           <UserProfile {...user} key={user.id} />
         ))}
       </div>
-      <button
-        onClick={() => {
-          getUsers("2", "8");
-        }}
-      >
-        +
-      </button>
     </>
   );
 };

@@ -1,51 +1,42 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { IUser } from "./typings/typings";
 import UserList from "./components/UserList/UserList";
 import useObservable from "./hooks/useObservable";
-import { getUsers, userList$ } from "./facade/userFacade";
+import {
+  getUsersOnChange$,
+  maxPages$,
+  changePageNumber,
+  changeDataPerPage,
+  dataPerPage$,
+  isLoading$,
+  errorMsg$,
+} from "./facade/userFacade";
 import logo from "./logo.svg";
+import Paginator from "./components/Paginator/Paginator";
 import "./App.css";
 
 function App() {
-  const list = useObservable<IUser[]>(userList$) || [];
-  const [page, setPage] = useState<string>("1");
-  const [limit, setLimit] = useState<string>("1");
-
-  useEffect(() => {
-    getUsers(page, limit);
-  }, [page, limit]);
+  const list = useObservable<IUser[]>(getUsersOnChange$) || [];
+  const maxPage = useObservable<number>(maxPages$);
+  const dataPerPage = useObservable<number>(dataPerPage$);
+  const errorMsg = useObservable<string>(errorMsg$);
+  const isLoading = useObservable<boolean>(isLoading$);
 
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <h1>RxJS with React</h1>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-          }}
-        >
-          <label>page </label>
-          <input
-            name="Page"
-            type="number"
-            value={page}
-            onChange={(e) => setPage(e.target.value)}
+        {maxPage && dataPerPage && (
+          <Paginator
+            dataPerPage={dataPerPage}
+            changeDataPerPage={changeDataPerPage}
+            pages={maxPage}
+            changePage={changePageNumber}
           />
-        </form>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-          }}
-        >
-          <label>limit</label>
-          <input
-            type="number"
-            value={limit}
-            onChange={(e) => setLimit(e.target.value)}
-          />
-        </form>
-        <UserList list={list} />
+        )}
+        {isLoading ? <p> Loading ... </p> : <UserList list={list} />}
+        {errorMsg && <p>{errorMsg}</p>}
       </header>
     </div>
   );
