@@ -3,8 +3,19 @@
 }
 
 .App-logo {
-  height: 25px;
+  height: 60px;
   pointer-events: none;
+}
+
+.profile-wrap {
+  grid-column: span 2 / span 2;
+  background: rgba(27, 26, 26, 0.37);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.profile-wrap p {
+  margin: 4px;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -14,7 +25,6 @@
 }
 body {
   background-color: #282c34;
-
 }
 .App-header {
   min-height: 100vh;
@@ -24,7 +34,7 @@ body {
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  max-width: 32em;
+  max-width: 1080px;
   margin: 0 auto;
 }
 

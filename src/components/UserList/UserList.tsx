@@ -11,11 +11,9 @@ const UserList = ({ list }: UserListProps): ReactElement => {
     <>
       <div
         style={{
-          display: "flex",
-          maxWidth: "100vw",
-          flexWrap: "wrap",
-          justifyContent: "center",
-          alignItems: "center",
+          display: "grid",
+          gap: "1rem",
+          gridTemplateColumns: "repeat(12,minmax(0,1fr))",
         }}
       >
         {list.map((user) => (

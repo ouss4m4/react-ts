@@ -26,7 +26,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <h1>RxJS with React</h1>
+        <h1 style={{ fontSize: "2rem" }}>RxJS with React</h1>
         {maxPage && dataPerPage && (
           <Paginator
             dataPerPage={dataPerPage}
